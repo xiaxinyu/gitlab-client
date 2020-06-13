@@ -1,4 +1,4 @@
 gitlab:
-  address: http://gitlab.devopsuat.crc.com.cn
-  username: admin1
-  token: Dfx1bopom3KfeDsUiU6f
+  address: http://10.201.109.80:10080/
+  username: root
+  token: FMrWX5sA9Q4xecgpUUsh
