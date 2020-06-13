@@ -838,7 +838,7 @@ public class BaseGitLabApi {
      * @return Tag 标签对象
      * @throws GitLabApiException
      */
-    public Tag getTagByName(Object idOrPath, String tagName) {
+    public Tag getTagByName(Integer idOrPath, String tagName) {
         try {
             return gitLabApi.getTagsApi().getTag(idOrPath, tagName);
         } catch (GitLabApiException e) {

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.models.Branch;
 import org.gitlab4j.api.models.Group;
 import org.gitlab4j.api.models.Project;
+import org.gitlab4j.api.models.Tag;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,8 @@ public class BaseGitlabApiTest {
 
     private String branchName;
 
+    private String tagName;
+
     private String userName;
 
     @Autowired
@@ -47,6 +50,7 @@ public class BaseGitlabApiTest {
         projectName = "ns";
         branchRef = "master";
         branchName = "fdc";
+        tagName = "tag-fdc";
         userName = properties.getUsername();
 
         InetAddress addr = InetAddress.getLocalHost();
@@ -107,5 +111,22 @@ public class BaseGitlabApiTest {
         Branch newBranch = baseGitLabApi.createBranch(project.getId(), branchName, branchRef);
         Assert.assertNotNull(newBranch);
         log.info("Create new branch: newBranchName={}", newBranch.getName());
+    }
+
+    @Test
+    public void testCreateTag() throws Exception {
+        Project project = baseGitLabApi.getProject(groupName, projectName);
+        Assert.assertNotNull(project);
+
+        Tag oldTag = baseGitLabApi.getTagByName(project.getId(), tagName);
+        if (Objects.nonNull(oldTag)) {
+            log.info("Old tag exist: oldTagName={}", oldTag.getName());
+            baseGitLabApi.deleteTag(project.getId(), tagName, userName);
+            log.info("Delete old tag: oldTagName={}", tagName);
+        }
+
+        Tag tag = baseGitLabApi.createTag(project.getId(), tagName, branchRef, "test", "test", userName);
+        Assert.assertNotNull(tag);
+        log.info("Create new tag: newTagName={}", tag.getName());
     }
 }
