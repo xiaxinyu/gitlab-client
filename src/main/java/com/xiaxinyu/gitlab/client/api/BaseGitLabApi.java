@@ -150,9 +150,7 @@ public class BaseGitLabApi {
         return group;
     }
 
-    public Group createGroup(JSONObject param, String userName) throws Exception {
-        String name = param.getString("name").trim();
-        String path = param.containsKey("path") ? param.getString("path") : name;
+    public Group createGroup(String name, String path, String userName) throws Exception {
         return getGitLabApi(userName).getGroupApi().addGroup(name, path);
     }
 
@@ -161,14 +159,8 @@ public class BaseGitLabApi {
         return true;
     }
 
-
-    public Project createProject(JSONObject param, String userName) throws Exception {
-        // 设置参数
-        String name = param.getString("name");
-        Integer namespaceId = param.containsKey("namespaceId") ? param.getInteger("namespaceId") : null;
-
-        Project project = getGitLabApi(userName).getProjectApi().createProject(namespaceId, name);
-
+    public Project createProject(Integer groupId, String name, String userName) throws Exception {
+        Project project = getGitLabApi(userName).getProjectApi().createProject(groupId, name);
         return project;
     }
 
@@ -266,14 +258,13 @@ public class BaseGitLabApi {
 
     public Project getProject(String namespace, String projectCode) throws Exception {
         log.info("获取Git项目，请求参数: namespace={}, projectCode={}", namespace, projectCode);
-
         try {
             // 如果没有工程ID则根据，namespace以及projectCode进行查找
             return gitLabApi.getProjectApi().getProject(namespace, projectCode);
         } catch (GitLabApiException ex) {
             // 如果没有则返回null
-            if (ex.getHttpStatus() != 404) {
-                throw ex;
+            if (ex.getHttpStatus() == 404) {
+                return null;
             }
             throw ex;
         }
