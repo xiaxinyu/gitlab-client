@@ -1,4 +1,4 @@
-package com.xiaxinyu.gitlab.client.core;
+package com.xiaxinyu.gitlab.client.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
