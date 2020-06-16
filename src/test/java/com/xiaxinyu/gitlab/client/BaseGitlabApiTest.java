@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +46,7 @@ public class BaseGitlabApiTest {
     GitlabClientProperties properties;
 
     @Before
-    public void before() throws UnknownHostException {
+    public void before() throws Exception {
         groupName = "sz";
         projectName = "ns";
         branchRef = "master";
@@ -56,6 +57,19 @@ public class BaseGitlabApiTest {
         InetAddress addr = InetAddress.getLocalHost();
         String ip = addr.getHostAddress();
         log.info("localIp={}", ip);
+
+
+        NetworkInterface network = NetworkInterface.getByInetAddress(addr);
+
+        byte[] mac = network.getHardwareAddress();
+
+        System.out.print("Current MAC address : ");
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mac.length; i++) {
+            sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? ":" : ""));
+        }
+        System.out.println(sb.toString());
     }
 
     @Test
