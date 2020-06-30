@@ -3,10 +3,7 @@ package com.xiaxinyu.gitlab.client;
 import com.xiaxinyu.gitlab.client.api.BaseGitLabApi;
 import com.xiaxinyu.gitlab.client.core.GitlabClientProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.gitlab4j.api.models.Branch;
-import org.gitlab4j.api.models.Group;
-import org.gitlab4j.api.models.Project;
-import org.gitlab4j.api.models.Tag;
+import org.gitlab4j.api.models.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -141,5 +138,16 @@ public class BaseGitlabApiTest {
         Tag tag = baseGitLabApi.createTag(project.getId(), tagName, branchRef, "test", "test", userName);
         Assert.assertNotNull(tag);
         log.info("Create new tag: newTagName={}", tag.getName());
+    }
+
+    @Test
+    public void testCommit() throws Exception {
+        Project project = baseGitLabApi.getProject("t25001-test-obj", "test-door");
+        Assert.assertNotNull(project);
+        log.info("projectId={}", project.getId());
+
+        Commit commit = baseGitLabApi.getCommit(project.getId(), "88e7ffca9bd15649572667475121e1c73c3eb824", "aliyate");
+        Assert.assertNotNull(commit);
+        log.info("commit={}", commit.getTitle());
     }
 }
