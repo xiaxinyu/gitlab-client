@@ -3,6 +3,7 @@ package com.xiaxinyu.gitlab.client;
 import com.xiaxinyu.gitlab.client.api.BaseGitLabApi;
 import com.xiaxinyu.gitlab.client.api.GitLabMemberApi;
 import lombok.extern.slf4j.Slf4j;
+import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.models.AccessLevel;
 import org.gitlab4j.api.models.Member;
 import org.gitlab4j.api.models.Project;
@@ -61,5 +62,19 @@ public class GitLabMemberApiTest {
 
         Member member = gitLabMemberApi.addProjectMember(project.getId(), user.getId(), AccessLevel.MAINTAINER);
         Assert.assertNotNull(member);
+    }
+
+    @Test
+    public void testGrantPrivilege() throws Exception {
+        Project project = baseGitLabApi.getProject(groupName, projectName);
+        Assert.assertNotNull(project);
+
+        User user = gitLabMemberApi.getGitUser(this.userName);
+        Assert.assertNotNull(user);
+
+        Member member = gitLabMemberApi.addProjectMember(project.getId(), user.getId(), AccessLevel.MAINTAINER);
+        Assert.assertNotNull(member);
+
+        log.info("Member={}", member);
     }
 }
