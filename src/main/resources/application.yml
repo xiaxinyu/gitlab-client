@@ -1,4 +1,4 @@
 gitlab:
-  address: http://gitlab.steamuat.crcloud.com
+  address: http://localhost:8080
   username: root
-  token: vbdSLEC-ywyA8V-38vWf
+  token: cypxSHnw6ZiiQPHQ1rsx
