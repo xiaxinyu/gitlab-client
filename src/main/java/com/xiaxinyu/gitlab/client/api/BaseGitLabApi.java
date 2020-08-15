@@ -1,8 +1,5 @@
 package com.xiaxinyu.gitlab.client.api;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpStatus;
@@ -125,15 +122,6 @@ public class BaseGitLabApi {
                 break;
             }
         }
-        return flag;
-    }
-
-    public boolean projectMemberHasRole(Integer id, String user, AccessLevel[] accessLevel) throws Exception {
-        JSONObject temp = new JSONObject();
-        temp.put("id", id);
-        List<Member> lsMem = getProjectMembers(id);
-        List<AccessLevel> lsAccessLevel = Arrays.asList(accessLevel);
-        boolean flag = memberContainsUser(lsMem, lsAccessLevel, user);
         return flag;
     }
 
@@ -467,37 +455,6 @@ public class BaseGitLabApi {
         }
     }
 
-    /**
-     * 获取提交记录
-     *
-     * @param projectId 工程ID
-     * @param branch    分支
-     * @param total     记录总大小
-     * @param curPage   当前页
-     * @param pageSize  每页大小
-     * @return
-     * @throws GitLabApiException
-     */
-    public JSONObject getCommits(Integer projectId, String branch, int total, int curPage, int pageSize) {
-        try {
-            JSONObject ret = new JSONObject();
-            branch = branch == null || branch.trim().equals("") ? "master" : branch;
-            pageSize = pageSize == 0 ? 1 : pageSize;
-            curPage = curPage == 0 ? 1 : curPage;
-
-            ret.put("curPage", curPage);
-            ret.put("pageSize", pageSize);
-
-            List<Commit> lsCommit = gitLabApi.getCommitsApi().getCommits(projectId, branch, null, null, null,
-                    (curPage - 1), pageSize);
-            ret.put("list", JSON.toJSON(lsCommit));
-            return ret;
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            throw new RuntimeException("获取git提交记录异常，请联系管理员！error:" + ex.getMessage());
-        }
-    }
-
     public Commit getTheLastCommit(Integer projectId, String branch) {
         try {
             branch = (StringUtils.isBlank(branch) ? "master" : branch);
@@ -518,7 +475,6 @@ public class BaseGitLabApi {
             log.debug("设置Gitlab用户{}的LDAP属性：{} {}", username, userDN, ldapProvider);
 
             User user = gitLabApi.getUserApi().getUser(username);
-            log.debug("查询用户信息：{}", JSON.toJSONString(user));
 
             if (user != null) {
                 user.setExternUid(userDN);

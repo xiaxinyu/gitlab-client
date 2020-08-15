@@ -1,7 +1,5 @@
 package com.xiaxinyu.gitlab.client.api.connect;
 
-import com.alibaba.fastjson.support.jaxrs.FastJsonAutoDiscoverable;
-
 import com.xiaxinyu.gitlab.client.api.GitLabApiExtend;
 import com.xiaxinyu.gitlab.client.core.GitlabClientProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +27,10 @@ public class GitlabConnection {
 
     @Bean
     public GitLabApi getGitLabApi() throws GitLabApiException {
-        // 默认禁用Fast作为json解析的Provider，会跟最新的gitlab接口冲突
-        FastJsonAutoDiscoverable.autoDiscover = config.isFastJsonAutoDiscover();
-
         log.debug("创建新的gitlab client api...，token={}", config.getToken());
         GitLabApi gitLabApi = new GitLabApi(ApiVersion.V4, config.getAddress(), config.getToken());
-
         // 默认不使用sudo操作，有需要再设置sudo
         gitLabApi.sudo(null);
-
         return gitLabApi;
     }
 

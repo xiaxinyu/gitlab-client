@@ -1,6 +1,5 @@
 package com.xiaxinyu.gitlab.client.api;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -75,15 +74,6 @@ public class GitLabMemberApi {
                 break;
             }
         }
-        return flag;
-    }
-
-    public boolean projectMemberHasRole(Integer id, String user, AccessLevel[] accessLevel) throws Exception {
-        JSONObject temp = new JSONObject();
-        temp.put("id", id);
-        List<Member> lsMem = getProjectMembers(id);
-        List<AccessLevel> lsAccessLevel = Arrays.asList(accessLevel);
-        boolean flag = memberContainsUser(lsMem, lsAccessLevel, user);
         return flag;
     }
 
